@@ -1,0 +1,50 @@
+<div id="jika-store-finder-app"
+     class="jika-layout-{{ block.settings.layout_style }}"
+     {{ block.shopify_attributes }}
+     data-shop="{{ shop.permanent_domain }}"
+     data-proxy-url="/apps/store-finder"
+     data-layout="{{ block.settings.layout_style }}">
+  <div class="jika-store-finder-loader">Loading store finder...</div>
+</div>
+
+{% schema %}
+{
+  "name": "Store Finder",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Stores"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Style",
+      "options": [
+        {
+          "value": "classic",
+          "label": "Classic (List & Map Side-by-Side)"
+        },
+        {
+          "value": "stacked",
+          "label": "Stacked (List Below Map)"
+        }
+      ],
+      "default": "classic"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  #jika-store-finder-app {
+    width: 100%;
+    min-height: 500px;
+    margin: 20px 0;
+  }
+</style>
+
+<script src="{{ 'store-finder.js' | asset_url }}" defer="defer"></script>
+<link rel="stylesheet" href="{{ 'store-finder.css' | asset_url }}">

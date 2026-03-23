@@ -32,3 +32,34 @@ model Session {
   refreshToken        String?
   refreshTokenExpires DateTime?
 }
+
+model Store {
+  id          String   @id @default(cuid())
+  shop        String
+  name        String
+  address     String
+  city        String?
+  province    String?
+  country     String?
+  zip         String?
+  phone       String?
+  email       String?
+  website     String?
+  latitude    Float?
+  longitude   Float?
+  hours       String?  // Store as JSON string
+  gbpId       String?  // Google Business Profile ID
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([shop])
+}
+
+model Settings {
+  id               String   @id @default(cuid())
+  shop             String   @unique
+  googleMapsApiKey String?
+  layout           String   @default("classic") // classic, mobile-first
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

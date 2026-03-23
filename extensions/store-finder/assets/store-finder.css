@@ -1,0 +1,85 @@
+#jika-store-finder-app {
+  display: flex;
+  height: 500px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  font-family: inherit;
+}
+
+/* 经典样式: 左右并排 (Sidebar on Left, Map on Right) */
+#jika-store-finder-app.jika-layout-classic {
+  flex-direction: row;
+}
+
+#jika-store-finder-app.jika-layout-classic .jika-sidebar {
+  width: 350px;
+  border-right: 1px solid #ccc;
+}
+
+/* 堆叠样式: 上下排列 (Map on Top, Sidebar below) */
+#jika-store-finder-app.jika-layout-stacked {
+  flex-direction: column;
+  height: auto;
+  min-height: 600px;
+}
+
+#jika-store-finder-app.jika-layout-stacked .jika-map {
+  height: 400px;
+  width: 100%;
+}
+
+#jika-store-finder-app.jika-layout-stacked .jika-sidebar {
+  width: 100%;
+  height: 300px;
+  border-right: none;
+  border-top: 1px solid #ccc;
+}
+
+.jika-sidebar {
+  overflow-y: auto;
+  background: #f9f9f9;
+}
+
+.jika-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.jika-item:hover {
+  background: #fff;
+}
+
+.jika-item h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.jika-item p {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.jika-item button {
+  padding: 5px 12px;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+.jika-map {
+  flex-grow: 1;
+  background: #eee;
+  position: relative;
+}
+
+.jika-store-finder-loader {
+  padding: 40px;
+  text-align: center;
+  width: 100%;
+}

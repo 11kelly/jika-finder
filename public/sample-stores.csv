@@ -1,0 +1,3 @@
+name,address,city,province,country,zip,phone,email,website,latitude,longitude,hours,gbpId
+"JIKA Flagship Store","123 Retail Ave","New York","NY","USA","10001","+1 212-555-0123","contact@jika.com","https://jika.com",40.7128,-74.0060,"Mon-Fri: 9am-9pm, Sat-Sun: 10am-6pm","ChIJye3S599YwokR9365511"
+"JIKA San Francisco","456 Tech Lane","San Francisco","CA","USA","94103","+1 415-555-0456","sf@jika.com","https://jika.com/sf",37.7749,-122.4194,"Daily: 10am-8pm","ChIJH9X-599YwokR9365522"
