@@ -22,22 +22,34 @@ const shopify = shopifyApp({
   },
   billing: {
     BASIC: {
-      name: "Basic",
-      amount: 5.0,
-      currencyCode: "USD",
-      interval: BillingInterval.Every30Days,
+      lineItems: [
+        {
+          name: "Basic Plan",
+          amount: 5.0,
+          currencyCode: "USD",
+          interval: BillingInterval.Every30Days,
+        },
+      ],
     },
     PRO: {
-      name: "Pro",
-      amount: 19.0,
-      currencyCode: "USD",
-      interval: BillingInterval.Every30Days,
+      lineItems: [
+        {
+          name: "Pro Plan",
+          amount: 19.0,
+          currencyCode: "USD",
+          interval: BillingInterval.Every30Days,
+        },
+      ],
     },
     ENTERPRISE: {
-      name: "Enterprise",
-      amount: 49.0,
-      currencyCode: "USD",
-      interval: BillingInterval.Every30Days,
+      lineItems: [
+        {
+          name: "Enterprise Plan",
+          amount: 49.0,
+          currencyCode: "USD",
+          interval: BillingInterval.Every30Days,
+        },
+      ],
     },
   },
   ...(process.env.SHOP_CUSTOM_DOMAIN

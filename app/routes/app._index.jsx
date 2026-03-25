@@ -38,10 +38,12 @@ function clamp(n, min, max) {
 function computeSetupScore(storeCount, isConfigured) {
   let s = 0;
   if (isConfigured) {
-    s += 45;
+    s += 50;
   }
-  s += clamp(Math.round((Math.min(storeCount, 12) / 12) * 55), 0, 55);
-  return clamp(s, 0, 100);
+  if (storeCount > 0) {
+    s += 50;
+  }
+  return s;
 }
 
 // eslint-disable-next-line react/prop-types -- local gauge
@@ -196,17 +198,19 @@ export default function Index() {
   const { storeCount, recentStores, isConfigured, shop } = useLoaderData();
   const navigate = useNavigate();
   const revalidator = useRevalidator();
-  const [tab, setTab] = useState("recent");
+  const [tab, setTab] = useState("guide");
   const [openId, setOpenId] = useState(null);
 
   const shopShort = shop.replace(".myshopify.com", "");
   const score = computeSetupScore(storeCount, isConfigured);
+  
   const criticalCount = isConfigured ? 0 : 1;
-  const improvementCount = isConfigured && storeCount === 0 ? 1 : 0;
+  const improvementCount = storeCount === 0 ? 1 : 0;
   const attentionCount = criticalCount + improvementCount;
+  
   const issuesWording =
     attentionCount === 0
-      ? "Everything looks on track. Keep adding locations so customers can find you."
+      ? "Everything looks on track. Your store finder is ready for customers!"
       : `We found ${attentionCount} setup item${attentionCount === 1 ? "" : "s"} that need your attention.`;
 
   const primaryAction = () => {
@@ -424,7 +428,7 @@ export default function Index() {
                   icon={<IconTrend />}
                   label="Map integration"
                   value={isConfigured ? "Active" : "Off"}
-                  tone="neutral"
+                  tone={isConfigured ? "good" : "neutral"}
                 />
               </div>
             </div>
@@ -435,19 +439,19 @@ export default function Index() {
           <div className="dash-tabs">
             <button
               type="button"
-              className={`dash-tab ${tab === "recent" ? "dash-tab--active" : ""}`}
-              onClick={() => setTab("recent")}
-            >
-              Recent locations
-              <span className="dash-tab-badge">{recentStores.length}</span>
-            </button>
-            <button
-              type="button"
-              className={`dash-tab ${tab === "guide" ? "dash-tab--active-secondary" : ""}`}
+              className={`dash-tab ${tab === "guide" ? "dash-tab--active" : ""}`}
               onClick={() => setTab("guide")}
             >
               Quick guide
-              <span className="dash-tab-badge dash-tab-badge--muted">3</span>
+              <span className="dash-tab-badge">3</span>
+            </button>
+            <button
+              type="button"
+              className={`dash-tab ${tab === "recent" ? "dash-tab--active-secondary" : ""}`}
+              onClick={() => setTab("recent")}
+            >
+              Recent locations
+              <span className="dash-tab-badge dash-tab-badge--muted">{recentStores.length}</span>
             </button>
             <div style={{ marginLeft: "auto", alignSelf: "center" }}>
               <button
@@ -461,7 +465,35 @@ export default function Index() {
             </div>
           </div>
 
-          {tab === "recent" ? (
+          {tab === "guide" ? (
+            <div style={{ paddingTop: 8, fontSize: 15, color: "#334155", lineHeight: 1.65 }}>
+              <p style={{ margin: "0 0 12px" }}>
+                <strong>1. Configure API:</strong> Add your Google Maps API key under Map Settings.
+              </p>
+              <p style={{ margin: "0 0 12px" }}>
+                <strong>2. Add stores:</strong> Create locations manually or import via CSV.
+              </p>
+              <p style={{ margin: 0 }}>
+                <strong>3. Embed on storefront:</strong> In the theme editor, add the Store Finder app block where you want the map.
+              </p>
+              <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10 }}>
+                <button type="button" className="dash-btn-primary" style={{ width: "auto", paddingInline: 22 }} onClick={() => navigate("/app/settings")}>
+                  Map settings
+                </button>
+                <button type="button" className="dash-btn-secondary" style={{ width: "auto", marginTop: 0 }} onClick={() => navigate("/app/stores/import")}>
+                  Bulk import
+                </button>
+                <button 
+                  type="button" 
+                  className="dash-btn-secondary" 
+                  style={{ width: "auto", marginTop: 0 }} 
+                  onClick={() => window.open(`https://${shop}/admin/themes/current/editor?context=apps`, "_blank")}
+                >
+                  Go to theme editor
+                </button>
+              </div>
+            </div>
+          ) : (
             recentStores.length === 0 ? (
               <div style={{ padding: "32px 8px", textAlign: "center", color: "#64748b" }}>
                 <p style={{ margin: "0 0 16px", fontSize: 15 }}>No store locations yet.</p>
@@ -531,26 +563,6 @@ export default function Index() {
                 })}
               </div>
             )
-          ) : (
-            <div style={{ paddingTop: 8, fontSize: 15, color: "#334155", lineHeight: 1.65 }}>
-              <p style={{ margin: "0 0 12px" }}>
-                <strong>1. Configure API:</strong> Add your Google Maps API key under Map Settings.
-              </p>
-              <p style={{ margin: "0 0 12px" }}>
-                <strong>2. Add stores:</strong> Create locations manually or import via CSV.
-              </p>
-              <p style={{ margin: 0 }}>
-                <strong>3. Embed on storefront:</strong> In the theme editor, add the Store Finder app block where you want the map.
-              </p>
-              <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10 }}>
-                <button type="button" className="dash-btn-primary" style={{ width: "auto", paddingInline: 22 }} onClick={() => navigate("/app/settings")}>
-                  Map settings
-                </button>
-                <button type="button" className="dash-btn-secondary" style={{ width: "auto", marginTop: 0 }} onClick={() => navigate("/app/stores/import")}>
-                  Bulk import
-                </button>
-              </div>
-            </div>
           )}
         </div>
       </div>

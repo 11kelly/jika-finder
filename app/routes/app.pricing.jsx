@@ -3,7 +3,7 @@
  * Copyright © 2026 eBrook Group (https://www.ebrook.com.tw)
  */
 
-import { useLoaderData, useFetcher } from "react-router";
+import { useLoaderData, useFetcher, Form, useNavigation, useActionData } from "react-router";
 import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }) => {
@@ -24,18 +24,14 @@ export const action = async ({ request }) => {
     return { error: "Missing plan" };
   }
 
-  const handle = process.env.SHOPIFY_APP_HANDLE || "jika-store-finder";
+  // Use a fallback handle if environment variable is missing
+  const handle = "jika-store-finder";
 
-  try {
-    return await billing.request({
-      plan: plan,
-      isTest: true,
-      returnUrl: `https://${session.shop}/admin/apps/${handle}/app/pricing`,
-    });
-  } catch (error) {
-    console.error("Billing request failed:", error);
-    return { error: error.message };
-  }
+  return await billing.request({
+    plan: plan,
+    isTest: true,
+    returnUrl: `https://${session.shop}/admin/apps/${handle}/app/pricing`,
+  });
 };
 
 /** Check icon for feature lists — purple like reference */
@@ -174,51 +170,53 @@ export default function Pricing() {
   const plans = [
     {
       id: "BASIC",
-      name: "Basic (鉤子版)",
+      name: "Basic (钩子版)",
       price: "5",
       priceSuffix: null,
-      tagline: "超低門檻，中小賣家首選",
-      addonsNote: "此方案不支援加購功能。",
+      tagline: "超低门槛，中小卖家首选",
+      addonsNote: "此方案不支持加购功能。",
       features: [
-        "Google Maps API 支援",
-        "無限门店点位展示",
+        "Google Maps API 支持",
+        "无限门店点位展示",
         "Classic / Mobile-First 版型",
-        "標準 CSV 批量導入",
-        "GBP 基礎資訊同步",
+        "标准 CSV 批量导入",
+        "GBP 基础信息同步",
       ],
     },
     {
       id: "PRO",
-      name: "Pro (行銷版)",
+      name: "Pro (营销版)",
       price: "19",
       priceSuffix: null,
-      tagline: "重視通路行銷與營運效率",
-      addonsNote: "可加購 HubSpot Connector（+$15/mo）。",
+      tagline: "重视通路营销与运营效率",
+      addonsNote: "可加购 HubSpot Connector（+$15/mo）。",
       features: [
         "包含 Basic 全部功能",
         "Luxury / Dealer Hub 版型",
-        "Google Sheets 即時同步",
-        "GBP 評論與星等顯示",
-        "據點限定優惠 Banners",
+        "Google Sheets 实时同步",
+        "GBP 评论与星等显示",
+        "据点限定优惠 Banners",
       ],
       popular: true,
     },
     {
       id: "ENTERPRISE",
-      name: "Enterprise (企業版)",
+      name: "Enterprise (企业版)",
       price: "49",
       priceSuffix: "+",
-      tagline: "B2B 品牌商、跨境大賣家",
-      addonsNote: "可加購 HubSpot Connector（+$15/mo）。",
+      tagline: "B2B 品牌商、跨境大卖家",
+      addonsNote: "可加购 HubSpot Connector（+$15/mo）。",
       features: [
         "包含 Pro 全部功能",
         "Mapbox / Google 双引擎",
-        "CSS 深度客製化支援",
-        "Magento 遷移顧問服務",
-        "商品 Collection 聯動過濾",
+        "CSS 深度客制化支持",
+        "Magento 迁移顾问服务",
+        "商品 Collection 联动过滤",
       ],
     },
   ];
+
+  const activePlan = plans.find(p => currentPlan.includes(p.id.toUpperCase()));
 
   return (
     <s-page heading="Plans & pricing" suppressHydrationWarning>
@@ -262,6 +260,24 @@ export default function Pricing() {
             line-height: 1.55;
             color: var(--pricing-muted);
             margin: 0;
+          }
+          .pricing-status-banner {
+            max-width: 1180px;
+            margin: 0 auto 32px;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(22, 101, 52, 0.05);
+          }
+          .pricing-status-banner__text {
+            font-weight: 600;
+            font-size: 15px;
           }
           .pricing-grid {
             display: grid;
@@ -515,6 +531,17 @@ export default function Pricing() {
           </p>
         </header>
 
+        {activePlan && (
+          <div className="pricing-status-banner">
+            <span style={{ color: "#22c55e" }} aria-hidden>
+              <IconCheckAccent />
+            </span>
+            <span className="pricing-status-banner__text">
+              您当前订阅：{activePlan.name}
+            </span>
+          </div>
+        )}
+
         <div
           className="pricing-grid"
           aria-busy={isSubmitting}
@@ -553,24 +580,22 @@ export default function Pricing() {
                     </div>
                     <p className="pricing-card__period">
                       USD / month
-                      {plan.priceSuffix ? " · 企業方案可另議" : ""}
+                      {plan.priceSuffix ? " · 企业方案可另议" : ""}
                     </p>
                   </div>
 
                   <p className="pricing-card__tagline">{plan.tagline}</p>
 
-                  <button
-                    type="button"
-                    className={`pricing-cta ${isCurrent ? "pricing-cta--current" : "pricing-cta--active"}`}
-                    disabled={isCurrent || isSubmitting}
-                    onClick={() => {
-                      if (!isCurrent && !isSubmitting) {
-                        fetcher.submit({ plan: plan.id }, { method: "post" });
-                      }
-                    }}
-                  >
-                    {planCtaLabel(plan.id, isCurrent, isThisSubmitting)}
-                  </button>
+                  <fetcher.Form method="post">
+                    <input type="hidden" name="plan" value={plan.id} />
+                    <button
+                      type="submit"
+                      className={`pricing-cta ${isCurrent ? "pricing-cta--current" : "pricing-cta--active"}`}
+                      disabled={isCurrent || isSubmitting}
+                    >
+                      {planCtaLabel(plan.id, isCurrent, isThisSubmitting)}
+                    </button>
+                  </fetcher.Form>
 
                   <div className="pricing-card__divider" />
 

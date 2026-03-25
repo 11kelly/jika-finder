@@ -9,7 +9,11 @@ import prisma from "../db.server";
 import "../styles/dash-theme.css";
 
 export const loader = async ({ request }) => {
-  const { session } = await authenticate.admin(request);
+  const { session, billing } = await authenticate.admin(request);
+  const billingData = await billing.check();
+  const activeSubscriptions = billingData.appSubscriptions;
+  const currentPlan = activeSubscriptions.length > 0 ? activeSubscriptions[0].name.toUpperCase() : "NONE";
+
   let settings = await prisma.settings.findUnique({
     where: { shop: session.shop },
   });
@@ -20,7 +24,7 @@ export const loader = async ({ request }) => {
     });
   }
 
-  return { settings };
+  return { settings, currentPlan };
 };
 
 export const action = async ({ request }) => {
@@ -45,7 +49,7 @@ export const action = async ({ request }) => {
 };
 
 export default function Settings() {
-  const { settings } = useLoaderData();
+  const { settings, currentPlan } = useLoaderData();
   const fetcher = useFetcher();
 
   const isSubmitting = fetcher.state === "submitting";
@@ -67,6 +71,32 @@ export default function Settings() {
 
         <form method="post">
           <div className="dash-form-stack">
+            {/* 方案权限测试区块 1: 行销版 (PRO) */}
+            {currentPlan.includes("PRO") && (
+              <div className="dash-card" style={{ borderLeft: "4px solid #7c3aed", background: "#f5f3ff" }}>
+                <div className="dash-form-stack">
+                  <h2 className="dash-card-title">🚀 [行销版专属] 模块测试</h2>
+                  <p className="dash-subtle" style={{ color: "#5b21b6" }}>
+                    您现在看到的是 <strong>Pro (行銷版)</strong> 的专属配置内容。
+                    此区块包含：Google Sheets 即時同步设置、据点限定优惠 Banners 管理等高级功能。
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* 方案权限测试区块 2: 企业版 (ENTERPRISE) */}
+            {currentPlan.includes("ENTERPRISE") && (
+              <div className="dash-card" style={{ borderLeft: "4px solid #2563eb", background: "#eff6ff" }}>
+                <div className="dash-form-stack">
+                  <h2 className="dash-card-title">🏢 [企业版专属] 模块测试</h2>
+                  <p className="dash-subtle" style={{ color: "#1d4ed8" }}>
+                    您现在看到的是 <strong>Enterprise (企業版)</strong> 的顶级配置内容。
+                    此区块包含：Mapbox 引擎切换、CSS 深度客製化、以及 B2B 联名展示管理。
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="dash-card">
               <div className="dash-form-stack">
                 <h2 className="dash-card-title">Google Maps integration</h2>
