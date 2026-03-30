@@ -13,6 +13,16 @@
       const apiKey = settings?.googleMapsApiKey;
       const layout = settings?.layout || 'classic';
 
+      // Apply appearance settings as CSS variables
+      if (settings) {
+        container.style.setProperty('--jika-primary-color', settings.primaryColor || '#000000');
+        container.style.setProperty('--jika-secondary-color', settings.secondaryColor || '#666666');
+        container.style.setProperty('--jika-accent-color', settings.accentColor || '#000000');
+        container.style.setProperty('--jika-text-color', settings.textColor || '#333333');
+        container.style.setProperty('--jika-bg-color', settings.bgColor || '#ffffff');
+        // markerColor logic can be added later to customize Google Maps markers
+      }
+
       if (!apiKey) {
         container.innerHTML = '<div class="jika-error">Google Maps API Key is missing in app settings.</div>';
         return;

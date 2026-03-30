@@ -60,6 +60,13 @@ model Settings {
   shop             String   @unique
   googleMapsApiKey String?
   layout           String   @default("classic") // classic, mobile-first
+  // Appearance customization
+  primaryColor     String   @default("#000000")
+  secondaryColor   String   @default("#666666")
+  accentColor      String   @default("#000000")
+  textColor        String   @default("#333333")
+  bgColor          String   @default("#ffffff")
+  markerColor      String   @default("#ff0000")
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }

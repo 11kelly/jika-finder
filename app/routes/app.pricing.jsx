@@ -3,7 +3,7 @@
  * Copyright © 2026 eBrook Group (https://www.ebrook.com.tw)
  */
 
-import { useLoaderData, useFetcher, Form, useNavigation, useActionData } from "react-router";
+import { useLoaderData, useFetcher } from "react-router";
 import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }) => {
@@ -24,12 +24,14 @@ export const action = async ({ request }) => {
     return { error: "Missing plan" };
   }
 
-  // Use a fallback handle if environment variable is missing
-  const handle = "jika-store-finder";
+  // App handle in admin URL: Partner Dashboard → App setup → embed path, or SHOPIFY_APP_HANDLE in .env
+  const handle = process.env.SHOPIFY_APP_HANDLE || "jika-store-finder";
+  // Development/test charges: set SHOPIFY_BILLING_TEST=true in .env; omit or false in production
+  const isTest = process.env.SHOPIFY_BILLING_TEST === "true";
 
   return await billing.request({
     plan: plan,
-    isTest: true,
+    isTest,
     returnUrl: `https://${session.shop}/admin/apps/${handle}/app/pricing`,
   });
 };

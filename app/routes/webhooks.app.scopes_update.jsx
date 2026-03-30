@@ -1,10 +1,14 @@
+/**
+ * Developed by eBrook Group.
+ * Copyright © 2026 eBrook Group (https://www.ebrook.com.tw)
+ */
+
 import { authenticate } from "../shopify.server";
 import db from "../db.server";
 
 export const action = async ({ request }) => {
-  const { payload, session, topic, shop } = await authenticate.webhook(request);
+  const { payload, session } = await authenticate.webhook(request);
 
-  console.log(`Received ${topic} webhook for ${shop}`);
   const current = payload.current;
 
   if (session) {
@@ -18,5 +22,5 @@ export const action = async ({ request }) => {
     });
   }
 
-  return new Response();
+  return new Response(null, { status: 200 });
 };

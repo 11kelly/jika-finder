@@ -37,11 +37,23 @@ export const action = async ({ request }) => {
     update: {
       googleMapsApiKey: data.googleMapsApiKey,
       layout: data.layout,
+      primaryColor: data.primaryColor,
+      secondaryColor: data.secondaryColor,
+      accentColor: data.accentColor,
+      textColor: data.textColor,
+      bgColor: data.bgColor,
+      markerColor: data.markerColor,
     },
     create: {
       shop: session.shop,
       googleMapsApiKey: data.googleMapsApiKey,
       layout: data.layout,
+      primaryColor: data.primaryColor,
+      secondaryColor: data.secondaryColor,
+      accentColor: data.accentColor,
+      textColor: data.textColor,
+      bgColor: data.bgColor,
+      markerColor: data.markerColor,
     },
   });
 
@@ -136,6 +148,40 @@ export default function Settings() {
                   value="mobile-first"
                   checked={layoutValue === "mobile-first"}
                 />
+              </div>
+            </div>
+
+            <div className="dash-card">
+              <div className="dash-form-stack">
+                <h2 className="dash-card-title">Appearance customization</h2>
+                <p className="dash-subtle">Customize colors to match your brand style.</p>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <div className="dash-form-stack">
+                    <label style={{ fontSize: '14px', fontWeight: '500' }}>Primary Color (Buttons, Selections)</label>
+                    <input type="color" name="primaryColor" defaultValue={settings.primaryColor || "#000000"} style={{ width: '100%', height: '40px' }} />
+                  </div>
+                  <div className="dash-form-stack">
+                    <label style={{ fontSize: '14px', fontWeight: '500' }}>Marker Color (Map Icons)</label>
+                    <input type="color" name="markerColor" defaultValue={settings.markerColor || "#ff0000"} style={{ width: '100%', height: '40px' }} />
+                  </div>
+                  <div className="dash-form-stack">
+                    <label style={{ fontSize: '14px', fontWeight: '500' }}>Text Color</label>
+                    <input type="color" name="textColor" defaultValue={settings.textColor || "#333333"} style={{ width: '100%', height: '40px' }} />
+                  </div>
+                  <div className="dash-form-stack">
+                    <label style={{ fontSize: '14px', fontWeight: '500' }}>Background Color</label>
+                    <input type="color" name="bgColor" defaultValue={settings.bgColor || "#ffffff"} style={{ width: '100%', height: '40px' }} />
+                  </div>
+                  <div className="dash-form-stack">
+                    <label style={{ fontSize: '14px', fontWeight: '500' }}>Secondary Color</label>
+                    <input type="color" name="secondaryColor" defaultValue={settings.secondaryColor || "#666666"} style={{ width: '100%', height: '40px' }} />
+                  </div>
+                  <div className="dash-form-stack">
+                    <label style={{ fontSize: '14px', fontWeight: '500' }}>Accent Color</label>
+                    <input type="color" name="accentColor" defaultValue={settings.accentColor || "#000000"} style={{ width: '100%', height: '40px' }} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
