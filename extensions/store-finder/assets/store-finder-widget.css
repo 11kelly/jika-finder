@@ -1,0 +1,341 @@
+/* ── Floating button ──────────────────────────────────────────────────────── */
+.jika-w-fab {
+  position: fixed;
+  bottom: 24px;
+  z-index: 9998;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--jika-w-color, #000);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+}
+
+.jika-w-fab:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32);
+}
+
+.jika-w-fab:active {
+  transform: translateY(-1px);
+}
+
+.jika-w-fab--bottom-right { right: 24px; }
+.jika-w-fab--bottom-left  { left: 24px;  }
+
+/* ── Overlay ──────────────────────────────────────────────────────────────── */
+.jika-w-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.jika-w-overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Modal ────────────────────────────────────────────────────────────────── */
+.jika-w-modal {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.22);
+  width: 100%;
+  max-width: 900px;
+  height: min(580px, 90vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(16px) scale(0.99);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+.jika-w-overlay--open .jika-w-modal {
+  transform: translateY(0) scale(1);
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.jika-w-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.jika-w-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.01em;
+}
+
+.jika-w-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  padding: 5px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.jika-w-close:hover {
+  background: #f3f4f6;
+  color: #111;
+}
+
+/* ── Body ─────────────────────────────────────────────────────────────────── */
+.jika-w-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────────────────── */
+.jika-w-sidebar {
+  width: 290px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #f0f0f0;
+  overflow: hidden;
+}
+
+.jika-w-search-wrap {
+  position: relative;
+  padding: 12px 12px 10px;
+  flex-shrink: 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.jika-w-search-icon {
+  position: absolute;
+  left: 23px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  pointer-events: none;
+}
+
+.jika-w-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px 8px 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #f9f9f9;
+  color: #111;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.jika-w-search:focus {
+  background: #fff;
+  border-color: var(--jika-w-color, #000);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--jika-w-color, #000) 12%, transparent);
+}
+
+.jika-w-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── Store items ──────────────────────────────────────────────────────────── */
+.jika-w-item {
+  padding: 13px 16px;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background 0.12s;
+}
+
+.jika-w-item:hover {
+  background: #fafafa;
+}
+
+.jika-w-item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 3px;
+  line-height: 1.4;
+}
+
+.jika-w-item-addr {
+  font-size: 12px;
+  color: #777;
+  line-height: 1.55;
+  margin-bottom: 3px;
+}
+
+.jika-w-item-phone {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  text-decoration: none;
+  margin-bottom: 3px;
+}
+
+.jika-w-item-phone:hover {
+  color: var(--jika-w-color, #000);
+}
+
+.jika-w-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 9px;
+  flex-wrap: wrap;
+}
+
+.jika-w-view-btn,
+.jika-w-dir-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 11px;
+  font-size: 11px;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.jika-w-view-btn {
+  border: 1.5px solid var(--jika-w-color, #000);
+  background: transparent;
+  color: var(--jika-w-color, #000);
+}
+
+.jika-w-view-btn:hover {
+  background: var(--jika-w-color, #000);
+  color: #fff;
+}
+
+.jika-w-dir-btn {
+  border: 1.5px solid #e5e7eb;
+  background: transparent;
+  color: #555;
+}
+
+.jika-w-dir-btn:hover {
+  border-color: #ccc;
+  background: #f9f9f9;
+  color: #111;
+}
+
+.jika-w-empty {
+  padding: 32px 16px;
+  font-size: 13px;
+  color: #bbb;
+  text-align: center;
+}
+
+/* ── Map pane ─────────────────────────────────────────────────────────────── */
+.jika-w-map-pane {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+  background: #f0f0f0;
+}
+
+.jika-w-map-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.jika-w-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-size: 13px;
+  color: #999;
+}
+
+.jika-w-spinner {
+  width: 30px;
+  height: 30px;
+  border: 2.5px solid #e5e7eb;
+  border-top-color: var(--jika-w-color, #000);
+  border-radius: 50%;
+  animation: jika-w-spin 0.65s linear infinite;
+}
+
+@keyframes jika-w-spin {
+  to { transform: rotate(360deg); }
+}
+
+.jika-w-error {
+  color: #ef4444;
+  font-size: 13px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .jika-w-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .jika-w-modal {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    height: 92vh;
+    transform: translateY(100%);
+  }
+
+  .jika-w-overlay--open .jika-w-modal {
+    transform: translateY(0);
+  }
+
+  .jika-w-body {
+    flex-direction: column;
+  }
+
+  .jika-w-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+    max-height: 42%;
+  }
+
+  .jika-w-map-pane {
+    flex: 1;
+    min-height: 200px;
+  }
+
+  .jika-w-fab--bottom-right { right: 16px; bottom: 16px; }
+  .jika-w-fab--bottom-left  { left: 16px;  bottom: 16px; }
+}

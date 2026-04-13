@@ -172,6 +172,15 @@
   color: #0f172a;
 }
 
+.dash-btn-ghost--danger {
+  color: #e53e3e;
+}
+
+.dash-btn-ghost--danger:hover {
+  background: #fff5f5;
+  color: #c53030;
+}
+
 .dash-btn-danger {
   display: inline-flex;
   align-items: center;
@@ -224,6 +233,150 @@
 
 .dash-tr:hover .dash-td {
   background: #fafbfc;
+}
+
+.dash-tr--selected .dash-td {
+  background: #eff6ff;
+}
+
+.dash-tr--selected:hover .dash-td {
+  background: #dbeafe;
+}
+
+.dash-th--checkbox,
+.dash-td--checkbox {
+  width: 40px;
+  padding-left: 16px;
+  padding-right: 4px;
+}
+
+.dash-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #458fff;
+}
+
+/* ── Bulk actions dropdown ──────────────────────────────────────────────────── */
+.dash-dropdown {
+  position: relative;
+}
+
+.dash-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dash-dropdown-caret {
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+
+.dash-dropdown-caret--open {
+  transform: rotate(180deg);
+}
+
+.dash-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid #e1e3e5;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.10);
+  padding: 4px;
+  z-index: 200;
+}
+
+.dash-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #334155;
+  text-align: left;
+}
+
+.dash-dropdown-item:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.dash-dropdown-item--danger {
+  color: #b91c1c;
+}
+
+.dash-dropdown-item--danger:hover:not(:disabled) {
+  background: #fef2f2;
+}
+
+.dash-dropdown-item--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.dash-dropdown-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ── Confirm modal ─────────────────────────────────────────────────────────── */
+.dash-confirm-modal {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+  width: 100%;
+  max-width: 400px;
+  padding: 32px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.dash-confirm-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.dash-confirm-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dash-confirm-body {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.dash-confirm-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  justify-content: center;
 }
 
 .dash-td--actions {
@@ -294,4 +447,423 @@
   font-size: 13px;
   color: #047857;
   line-height: 1.45;
+}
+
+/* Plain-HTML form fields (used where programmatic value control is needed) */
+.dash-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dash-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.dash-label--required::after {
+  content: " *";
+  color: #b91c1c;
+}
+
+.dash-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #c9cccf;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #202223;
+  background: #fff;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.dash-input:focus {
+  border-color: #458fff;
+  box-shadow: 0 0 0 3px rgba(69, 143, 255, 0.15);
+}
+
+.dash-input::placeholder {
+  color: #9ba7b3;
+}
+
+.dash-input--error {
+  border-color: #e53e3e;
+}
+
+.dash-input--error:focus {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+}
+
+.dash-field-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #e53e3e;
+}
+
+/* Map picker container */
+.dash-map-picker {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #c9cccf;
+  height: 320px;
+  position: relative;
+}
+
+.dash-map-search-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.dash-map-search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #c9cccf;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #202223;
+  background: #fff;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.dash-map-search-input:focus {
+  border-color: #458fff;
+  box-shadow: 0 0 0 3px rgba(69, 143, 255, 0.15);
+}
+
+.dash-map-no-key {
+  padding: 16px;
+  border-radius: 10px;
+  background: #fef2f2;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  font-size: 13px;
+  color: #b91c1c;
+  line-height: 1.5;
+}
+
+/* ── Appearance customization ──────────────────────────────────────────────── */
+.dash-appearance-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .dash-appearance-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dash-color-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dash-color-swatch {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  padding: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: none;
+}
+
+.dash-color-swatch::-webkit-color-swatch-wrapper { padding: 0; border-radius: 8px; }
+.dash-color-swatch::-webkit-color-swatch { border: 1px solid rgba(0,0,0,0.12); border-radius: 8px; }
+
+.dash-color-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dash-color-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.dash-color-hex {
+  font-size: 11px;
+  color: #94a3b8;
+  font-family: monospace;
+  letter-spacing: 0.04em;
+}
+
+/* Preview panel */
+.dash-preview-panel {
+  background: #f8fafc;
+  border: 1px solid #e1e3e5;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.dash-preview-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+
+.dash-preview-icons {
+  border-bottom: 1px solid #e1e3e5;
+  padding-bottom: 16px;
+  margin-bottom: 0;
+}
+
+.dash-preview-icon-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.dash-preview-icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.dash-preview-icon-caption {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.dash-preview-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.dash-preview-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Store card mock */
+.dash-preview-card {
+  border: 1px solid;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.dash-preview-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid;
+}
+
+.dash-preview-store-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid;
+}
+
+.dash-preview-store-name {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.dash-preview-store-meta {
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.dash-preview-store-hours {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.dash-preview-store-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.dash-preview-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dash-preview-link {
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ── Map picker modal ──────────────────────────────────────────────────────── */
+.dash-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.dash-modal {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.dash-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  border-bottom: 1px solid #e1e3e5;
+  flex-shrink: 0;
+}
+
+.dash-modal-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.dash-modal-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+.dash-modal-close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.dash-modal-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 420px;
+}
+
+.dash-modal-left {
+  width: 280px;
+  flex-shrink: 0;
+  padding: 20px;
+  border-right: 1px solid #e1e3e5;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+}
+
+.dash-modal-map {
+  flex: 1;
+  min-width: 0;
+}
+
+.dash-modal-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid #e1e3e5;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.dash-modal-preview-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #334155;
+}
+
+.dash-modal-preview-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.dash-modal-empty-hint {
+  padding: 20px 0;
+  font-size: 13px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.dash-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid #e1e3e5;
+  flex-shrink: 0;
+}
+
+/* Ensure Google Places autocomplete dropdown appears above the modal */
+.pac-container {
+  z-index: 1100 !important;
+}
+
+@media (max-width: 640px) {
+  .dash-modal-body {
+    flex-direction: column;
+    min-height: unset;
+  }
+  .dash-modal-left {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid #e1e3e5;
+  }
+  .dash-modal-map {
+    height: 280px;
+  }
 }

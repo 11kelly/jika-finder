@@ -1,31 +1,30 @@
 #jika-store-finder-app {
   display: flex;
   height: 500px;
-  border: 1px solid #ccc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   overflow: hidden;
   font-family: inherit;
-  /* Default values for variables */
-  --jika-primary-color: #000000;
+  --jika-primary-color:   #000000;
   --jika-secondary-color: #666666;
-  --jika-accent-color: #000000;
-  --jika-text-color: #333333;
-  --jika-bg-color: #ffffff;
-  
+  --jika-accent-color:    #000000;
+  --jika-text-color:      #333333;
+  --jika-bg-color:        #ffffff;
   color: var(--jika-text-color);
   background-color: var(--jika-bg-color);
 }
 
-/* 经典样式: 左右并排 (Sidebar on Left, Map on Right) */
+/* ── Classic: side by side ───────────────────────────────────────────────── */
 #jika-store-finder-app.jika-layout-classic {
   flex-direction: row;
 }
 
 #jika-store-finder-app.jika-layout-classic .jika-sidebar {
-  width: 350px;
-  border-right: 1px solid #ccc;
+  width: 340px;
+  border-right: 1px solid #e5e7eb;
 }
 
-/* 堆叠样式: 上下排列 (Map on Top, Sidebar below) */
+/* ── Stacked: map top, list bottom ──────────────────────────────────────── */
 #jika-store-finder-app.jika-layout-stacked {
   flex-direction: column;
   height: auto;
@@ -41,60 +40,154 @@
   width: 100%;
   height: 300px;
   border-right: none;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #e5e7eb;
 }
 
+/* ── Sidebar ──────────────────────────────────────────────────────────────── */
 .jika-sidebar {
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: var(--jika-bg-color);
 }
 
+/* ── Search ───────────────────────────────────────────────────────────────── */
+.jika-search-wrap {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.jika-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #f9f9f9;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.jika-search-input:focus {
+  border-color: var(--jika-primary-color);
+  background: #fff;
+}
+
+/* ── List ─────────────────────────────────────────────────────────────────── */
+.jika-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── Store item ───────────────────────────────────────────────────────────── */
 .jika-item {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-  transition: background 0.2s;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s;
 }
 
 .jika-item:hover {
-  filter: brightness(0.95);
+  background: #fafafa;
 }
 
-.jika-item h3 {
-  margin: 0 0 5px 0;
-  font-size: 16px;
-  font-weight: bold;
+.jika-item-name {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--jika-primary-color);
+  line-height: 1.4;
+}
+
+.jika-item-addr {
+  margin: 0 0 3px;
+  font-size: 13px;
+  color: var(--jika-secondary-color);
+  line-height: 1.5;
+}
+
+.jika-item-phone {
+  margin: 0 0 3px;
+}
+
+.jika-item-phone a {
+  font-size: 13px;
+  color: var(--jika-secondary-color);
+  text-decoration: none;
+}
+
+.jika-item-phone a:hover {
   color: var(--jika-primary-color);
 }
 
-.jika-item p {
-  margin: 0 0 5px 0;
-  font-size: 14px;
-  color: var(--jika-secondary-color);
+/* ── Action buttons ───────────────────────────────────────────────────────── */
+.jika-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  flex-wrap: wrap;
 }
 
-.jika-item button {
-  padding: 8px 16px;
+.jika-view-btn,
+.jika-dir-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  border-radius: 6px;
   cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.jika-view-btn {
+  border: 1.5px solid var(--jika-primary-color);
+  background: transparent;
+  color: var(--jika-primary-color);
+}
+
+.jika-view-btn:hover {
   background: var(--jika-primary-color);
   color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
 }
 
-.jika-item button:hover {
-  filter: brightness(1.2);
+.jika-dir-btn {
+  border: 1.5px solid #e5e7eb;
+  background: transparent;
+  color: #555;
 }
 
+.jika-dir-btn:hover {
+  border-color: #ccc;
+  background: #f3f4f6;
+  color: #111;
+}
+
+/* ── Map ──────────────────────────────────────────────────────────────────── */
 .jika-map {
-  flex-grow: 1;
-  background: #eee;
+  flex: 1;
+  background: #f0f0f0;
   position: relative;
+  min-width: 0;
 }
 
+/* ── Error / loader ───────────────────────────────────────────────────────── */
+.jika-error,
 .jika-store-finder-loader {
   padding: 40px;
   text-align: center;
   width: 100%;
+  font-size: 14px;
+  color: #999;
+  box-sizing: border-box;
+}
+
+.jika-error {
+  color: #ef4444;
 }
