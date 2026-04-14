@@ -59,6 +59,7 @@ model Settings {
   id               String   @id @default(cuid())
   shop             String   @unique
   googleMapsApiKey String?
+  googleMapId      String?
   layout           String   @default("classic") // classic, mobile-first
   // Appearance customization
   primaryColor     String   @default("#000000")
@@ -67,6 +68,15 @@ model Settings {
   textColor        String   @default("#333333")
   bgColor          String   @default("#ffffff")
   markerColor      String   @default("#ff0000")
+  markerSize       Int      @default(32)
+  markerIconUrl    String?
+  mapStyle           String   @default("default") // default | silver | dark | retro
+  mapType            String   @default("roadmap")
+  mapUseCustomColors Boolean  @default(false)
+  mapColorLand       String   @default("#e5e3df")
+  mapColorWater      String   @default("#c0d8e8")
+  mapColorRoad       String   @default("#ffffff")
+  mapColorLabel      String   @default("#616161")
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }

@@ -1,3 +1,7 @@
+/**
+ * Developed by eBrook Group.
+ * Copyright © 2026 eBrook Group (https://www.ebrook.com.tw)
+ */
 (function () {
   if (window.__jikaWidget) return;
   window.__jikaWidget = true;
@@ -40,7 +44,6 @@
   overlay.innerHTML =
     '<div class="jika-w-modal">' +
       '<div class="jika-w-header">' +
-        '<span class="jika-w-title">' + config.heading + '</span>' +
         '<button class="jika-w-close" aria-label="Close">' +
           '<svg width="18" height="18" viewBox="0 0 18 18" fill="none">' +
             '<path d="M14 4L4 14M4 4l10 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
@@ -109,6 +112,14 @@
       })
       .then(function (data) {
         dataCache = data;
+        if (data.settings) {
+          var s = data.settings;
+          overlay.style.setProperty('--jika-primary-color',   s.primaryColor   || '#000000');
+          overlay.style.setProperty('--jika-secondary-color', s.secondaryColor || '#666666');
+          overlay.style.setProperty('--jika-accent-color',    s.accentColor    || '#000000');
+          overlay.style.setProperty('--jika-text-color',      s.textColor      || '#111111');
+          overlay.style.setProperty('--jika-bg-color',        s.bgColor        || '#ffffff');
+        }
         initWidget(data);
       })
       .catch(function () {
@@ -201,37 +212,120 @@
     loadingEl.style.display = 'none';
     mapCanvas.style.display = 'block';
 
-    mapInstance = new google.maps.Map(mapCanvas, {
-      center:            { lat: 25.033, lng: 121.5654 },
-      zoom:              10,
+    function buildMapStylesFromUserColors(land, water, road, label) {
+      var L = land || '#e5e3df';
+      var W = water || '#c0d8e8';
+      var R = road || '#ffffff';
+      var T = label || '#616161';
+      return [
+        { elementType: 'geometry', stylers: [{ color: L }] },
+        { elementType: 'labels.text.fill', stylers: [{ color: T }] },
+        { elementType: 'labels.text.stroke', stylers: [{ color: L }] },
+        { featureType: 'poi', elementType: 'geometry', stylers: [{ color: L }] },
+        { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: L }] },
+        { featureType: 'road', elementType: 'geometry', stylers: [{ color: R }] },
+        { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: R }] },
+        { featureType: 'water', elementType: 'geometry', stylers: [{ color: W }] },
+      ];
+    }
+
+    var mapStylePresets = {
+      silver:    [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]}],
+      dark:      [{"elementType":"geometry","stylers":[{"color":"#1d2c4d"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#8ec3b9"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#1a3646"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#304a7d"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#2c6675"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#0e1626"}]}],
+      retro:     [{"elementType":"geometry","stylers":[{"color":"#ebe3cd"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#523735"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f1e6"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#f5f1e6"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#f8c967"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#b9d3c2"}]}],
+    };
+    var stylePreset = settings.mapStyle || 'default';
+    var mapTypeId   = settings.mapType  || 'roadmap';
+    var validPreset = ['default', 'silver', 'dark', 'retro'].indexOf(stylePreset) !== -1 ? stylePreset : 'default';
+    var useCustomMapColors = settings.mapUseCustomColors === true || settings.mapUseCustomColors === 1;
+    var styles = [];
+    if (useCustomMapColors) {
+      styles = buildMapStylesFromUserColors(
+        settings.mapColorLand,
+        settings.mapColorWater,
+        settings.mapColorRoad,
+        settings.mapColorLabel
+      );
+    } else if (validPreset !== 'default') {
+      styles = mapStylePresets[validPreset] || [];
+    }
+
+    var hasCustomIcon = !!settings.markerIconUrl;
+    var providedMapId = settings.googleMapId;
+    var useAdvanced   = hasCustomIcon || !!providedMapId;
+    var markerSize    = settings.markerSize || 32;
+    var markerColor   = settings.markerColor || config.color;
+
+    var mapOptions = {
+      center:            { lat: 0, lng: 0 },
+      zoom:              2,
       mapTypeControl:    false,
       streetViewControl: false,
       fullscreenControl: false,
-      mapId:             'DEMO_MAP_ID',
-    });
+      mapTypeId:         mapTypeId,
+    };
+    if (styles.length && !useAdvanced) {
+      mapOptions.styles = styles;
+    }
+    if (useAdvanced) {
+      mapOptions.mapId = providedMapId || 'DEMO_MAP_ID';
+    }
 
-    var bounds     = new google.maps.LatLngBounds();
-    var markerColor = settings.markerColor || config.color;
-    var hasAny     = false;
+    mapInstance = new google.maps.Map(mapCanvas, mapOptions);
+
+    var bounds = new google.maps.LatLngBounds();
+    var hasAny = false;
 
     markers = stores.map(function (store) {
       if (!store.latitude || !store.longitude) return null;
       var pos = { lat: store.latitude, lng: store.longitude };
-      var pin = new google.maps.marker.PinElement({
-        background:   markerColor,
-        borderColor:  '#ffffff',
-        glyphColor:   '#ffffff',
-        scale:        1.1,
-      });
-      var marker = new google.maps.marker.AdvancedMarkerElement({
-        map:      mapInstance,
-        position: pos,
-        title:    store.name,
-        content:  pin.element,
-      });
+      var marker;
+
+      if (useAdvanced) {
+        var markerContent;
+        if (hasCustomIcon) {
+          var img = document.createElement('img');
+          img.src = settings.markerIconUrl;
+          img.style.width = markerSize + 'px';
+          img.style.height = 'auto';
+          markerContent = img;
+        } else {
+          var pin = new google.maps.marker.PinElement({
+            background:  markerColor,
+            borderColor: '#ffffff',
+            glyphColor:  '#ffffff',
+            scale:       (markerSize / 32) * 1.1,
+          });
+          markerContent = pin.element;
+        }
+        marker = new google.maps.marker.AdvancedMarkerElement({
+          map:      mapInstance,
+          position: pos,
+          title:    store.name,
+          content:  markerContent,
+        });
+      } else {
+        var height = (markerSize / 32) * 44;
+        var svg =
+          '<svg width="' + markerSize + '" height="' + height + '" viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+          '<path d="M16 0C7.163 0 0 7.163 0 16c0 10.627 14.222 26.48 15.168 27.537a1.1 1.1 0 001.664 0C17.778 42.48 32 26.627 32 16 32 7.163 24.837 0 16 0z" fill="' + markerColor + '"/>' +
+          '<circle cx="16" cy="16" r="6" fill="white" fillOpacity="0.85"/></svg>';
+        var encoded = window.btoa(svg);
+        marker = new google.maps.Marker({
+          position: pos,
+          map:      mapInstance,
+          title:    store.name,
+          icon: {
+            url:         'data:image/svg+xml;base64,' + encoded,
+            scaledSize:  new google.maps.Size(markerSize, height),
+            anchor:      new google.maps.Point(markerSize / 2, height),
+          },
+        });
+      }
+
       bounds.extend(pos);
       hasAny = true;
-      marker.addListener('click', function () { showInfo(store, marker); });
+      marker.addListener('click', function () { showInfo(store, marker, settings); });
       return marker;
     });
 
@@ -243,18 +337,28 @@
     }, 150);
   }
 
-  function showInfo(store, marker) {
+  function showInfo(store, marker, settings) {
     if (!infoWindow) infoWindow = new google.maps.InfoWindow();
     var lines = [store.address, [store.city, store.province].filter(Boolean).join(', ')].filter(Boolean);
+    var textColor = settings.textColor || '#333333';
+    var primaryColor = settings.primaryColor || '#000000';
+    var secondaryColor = settings.secondaryColor || '#666666';
+
     infoWindow.setContent(
-      '<div style="padding:2px 4px;min-width:150px;font-family:inherit">' +
-        '<div style="font-weight:700;font-size:13px;margin-bottom:3px">' + esc(store.name) + '</div>' +
+      '<div style="padding:4px;min-width:180px;font-family:inherit;color:' + textColor + '">' +
+        '<div style="font-weight:700;font-size:14px;margin-bottom:6px;color:' + primaryColor + '">' + esc(store.name) + '</div>' +
         lines.map(function (l) {
-          return '<div style="font-size:12px;color:#555;line-height:1.5">' + esc(l) + '</div>';
+          return '<div style="font-size:13px;color:' + secondaryColor + ';line-height:1.4">' + esc(l) + '</div>';
         }).join('') +
         (store.phone
-          ? '<div style="margin-top:5px"><a href="tel:' + esc(store.phone) + '" style="font-size:12px">' + esc(store.phone) + '</a></div>'
+          ? '<div style="margin-top:6px;font-size:13px"><a href="tel:' + esc(store.phone) + '" style="color:' + primaryColor + ';text-decoration:none">' + esc(store.phone) + '</a></div>'
           : '') +
+        '<div style="margin-top:10px;border-top:1px solid #eee;padding-top:10px">' +
+          '<a href="' + directionsUrl(store) + '" target="_blank" rel="noopener noreferrer"' +
+             ' style="font-size:12px;font-weight:700;color:' + primaryColor + ';text-decoration:none;text-transform:uppercase;letter-spacing:0.5px">' +
+            'Get directions ↗' +
+          '</a>' +
+        '</div>' +
       '</div>'
     );
     infoWindow.open({ map: mapInstance, anchor: marker });
@@ -262,10 +366,11 @@
 
   function focusMarker(idx) {
     var store = dataCache.stores[idx];
+    var settings = dataCache.settings || {};
     if (!store || !store.latitude || !mapInstance) return;
     mapInstance.panTo({ lat: store.latitude, lng: store.longitude });
     mapInstance.setZoom(15);
-    if (markers[idx]) showInfo(store, markers[idx]);
+    if (markers[idx]) showInfo(store, markers[idx], settings);
   }
 
   function updateMarkers(filtered, allStores) {

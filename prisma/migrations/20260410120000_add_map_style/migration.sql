@@ -1,0 +1,2 @@
+ALTER TABLE "Settings" ADD COLUMN "mapStyle" TEXT NOT NULL DEFAULT 'default';
+ALTER TABLE "Settings" ADD COLUMN "mapType" TEXT NOT NULL DEFAULT 'roadmap';
