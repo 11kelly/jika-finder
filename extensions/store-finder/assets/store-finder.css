@@ -1,3 +1,12 @@
+/**
+ * Developed by eBrook Group.
+ * Copyright © 2026 eBrook Group (https://www.ebrook.com.tw)
+ */
+
+[data-block-handle="jika-store-finder"] {
+  width: 100%;
+}
+
 #jika-store-finder-app {
   display: flex;
   height: 500px;
